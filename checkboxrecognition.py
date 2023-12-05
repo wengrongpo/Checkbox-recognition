@@ -9,15 +9,15 @@ import matplotlib.pyplot as plt
 from skimage.io import imread, imshow
 from matplotlib.figure import Figure
 
-val = input("Please Enter your box size: ")
-if int(val) >= 60:
-    S = 75
-else:
-    S = 60
-
-
+#参数配置
+S = 60
 black = np.array([0, 0, 0])
-im = cv2.imread('test.tif')
+red = 55
+green = 55
+blue = 55
+k=30
+
+im = cv2.imread('test11.jpg')
 
 imshow(im)
 # im = cv2.GaussianBlur(im, (3, 3), 0)
@@ -119,12 +119,15 @@ for x, y, w, h, area in stats[2:]:
         whitePx = 0
         for i in range(x, x+w-1):
             for j in range(y, y+h-1):
-                if np.array_equal(im[j, i], black):
+                if im[j, i][0] < red and im[j, i][1] < green and im[j, i][2] < blue:
                     blackPx += 1
                 else:
-                    whitePx += 1
+                    whitePx += 1                                         # 将像素标记为蓝色
+            print(f"Pixel at ({i}, {j}): {im[j, i]}")        
+        print(f"black:{blackPx}")
+        print(f"white:{whitePx}")
         # Condition for checked box
-        if 20*blackPx < whitePx:
+        if k*blackPx < whitePx:
             cv2.rectangle(im, (x, y), (x+w, y+h), (255, 0, 0), 2)
         else:
             cv2.rectangle(im, (x, y), (x+w, y+h), (0, 255, 0), 2)
